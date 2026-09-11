@@ -14,7 +14,7 @@ uv run reproduce.py --with-notebooks --jit
 ```
 
 ```
-12 passed, 0 skipped, 0 failed
+13 passed, 0 skipped, 0 failed
 ```
 
 The code is Python 3.9 and the standard library, so `python3 reproduce.py` works
