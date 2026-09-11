@@ -102,7 +102,13 @@ def step_tests() -> None:
 
 
 # ── 3. the C++ port, against the same expected files ─────────────────────────
-CPP_DEMOS = [("tsp_transient", "tsp_transient.txt"), ("bpp_amortized", "bpp_amortized.txt")]
+# Only the transient operator has a C++ port, and that is not an omission: its
+# artifact is data (a permutation), so both languages can produce it and the
+# outputs must match. The bin-packing operator emits *Python source* and executes
+# it, which a C++ program cannot do without embedding an interpreter. Its C++
+# counterpart is a different demo — one that emits C++ and compiles it — and it
+# lives behind --jit.
+CPP_DEMOS = [("tsp_transient", "tsp_transient.txt")]
 
 
 def step_cpp(bless: bool) -> None:
