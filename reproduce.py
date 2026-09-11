@@ -203,8 +203,11 @@ def step_jit(bless: bool) -> None:
     print("\n==> 5/5  Emitted-C++ demo (opt-in)")
     path = os.path.join(CPP, "bin", "bpp_ahd_jit")
     if not os.path.exists(path):
-        record(SKIP, "cpp bpp_ahd_jit", "not built (run make -C cpp)")
-        return
+        # its own make target, because it is the one demo that shells out to a
+        # compiler at run time and nobody should pay for it unless they asked
+        if not shutil.which("make") or run(["make", "-s", "jit"], cwd=CPP)[0] != 0:
+            record(SKIP, "cpp bpp_ahd_jit", "could not build it")
+            return
     rc, produced = run([path])
     if rc != 0:
         record(FAIL, "cpp bpp_ahd_jit", f"exit {rc}")
