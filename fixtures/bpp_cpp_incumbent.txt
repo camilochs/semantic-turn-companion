@@ -1,0 +1,10 @@
+CANDIDATE
+id: h
+representation: cpp
+payload:
+std::vector<double> priority(int item, const std::vector<int>& bins) {
+    std::vector<double> s;
+    for (std::size_t i = 0; i < bins.size(); ++i) s.push_back(-static_cast<double>(i));
+    return s;
+}
+END_CANDIDATE

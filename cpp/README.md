@@ -11,6 +11,13 @@ make && ./bin/tsp_transient     # the traced iteration, same output as python3 t
 make jit && ./bin/bpp_ahd_jit   # opt-in: the operator emits C++, and the loop compiles it
 ```
 
+In `bpp_ahd_jit.cpp` the middle layer of Algorithm 2 is the compiler: a candidate
+that does not build is refused with the compiler's own diagnostic, and that text is
+what the repair prompt hands back. Only the fact of the failure is printed in the
+trace — the wording of a diagnostic is not the same across compilers, and nothing
+that varies by toolchain belongs in a file that claims to reproduce. Pass
+`--show-diagnostics` to see it.
+
 ## Why the port is also a test
 
 `./bin/tsp_transient` and `python3 tsp_transient.py` are compared against the same
@@ -40,7 +47,9 @@ Comparison is always on formatted text, never on raw doubles.
 
 - **No port of the bin-packing operator.** That demo emits Python source and runs
   it; a C++ program cannot do that without embedding an interpreter. The honest C++
-  counterpart is `bpp_ahd_jit.cpp`, where the emitted artifact is C++.
+  counterpart is `bpp_ahd_jit.cpp`, where the emitted artifact is C++ — and it lands
+  on the same trace as the Python one, first fit at 22 bins to best fit at 19, which
+  is why `reproduce.py --jit` compares it against `expected/bpp_amortized.txt`.
 - **No real model adapter.** The C++ side is mock-only. It exists to show the loop,
   not the transport; adding an HTTP client and a JSON library would double the
   dependencies of the repository to demonstrate nothing about the operator.

@@ -1,0 +1,30 @@
+CANDIDATE
+id: h
+representation: cpp
+payload:
+int priority(int item, const std::vector<int>& bins) {
+    return 0;   // invalid: one score for the whole call, not one per bin
+}
+END_CANDIDATE
+---
+CANDIDATE
+id: h
+representation: cpp
+payload:
+std::vector<double> priority(int item, const std::vector<int>& bins) {
+    std::vector<double> s;
+    for (int b : bins) s.push_back(static_cast<double>(b - item));
+    return s;
+}
+END_CANDIDATE
+---
+CANDIDATE
+id: h
+representation: cpp
+payload:
+std::vector<double> priority(int item, const std::vector<int>& bins) {
+    std::vector<double> s;
+    for (int b : bins) s.push_back(-static_cast<double>(b - item));
+    return s;
+}
+END_CANDIDATE

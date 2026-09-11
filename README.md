@@ -9,6 +9,8 @@ Claude adapter is included for real runs.
 The loop is here twice, in Python and in C++, and both are compared against the same
 frozen output. That is the point of the port: if the two disagree, the algorithm as
 written in the paper is under-specified, and `reproduce.py` is where that shows up.
+The same holds for the emitted artifact: the operator reaches the same heuristic,
+22 bins down to 19, whether what it writes is Python or C++.
 
 ```bash
 python3 reproduce.py                    # everything that needs no extra tool
@@ -44,7 +46,7 @@ its own output, so GitHub shows the trace without executing anything.
 | `bpp_amortized.py` | §*A second trace: a code-emitting operator* | an **amortized**, code-conditioned operator (FunSearch / EoH style): it emits a Python `priority(item, bins)` heuristic for online bin packing |
 | `ablation.py`, `candidates.json` | App. *Placing every method: a drop-channel audit* | the drop-channel ablation: heuristics generated with and without the natural-language idea, scored by bin-packing gap |
 | `fixtures/` | — | the completions the mock model returns, as text. One file, read by both languages: two copies of a pool drift on the first edit |
-| `cpp/` | **Algorithm 1**, again | the loop in C++17, header-only, no third-party libraries. See [`cpp/README.md`](cpp/README.md) |
+| `cpp/` | **Algorithm 1**, again | the loop in C++17, header-only, no third-party libraries. `tsp_transient.cpp` prints the same trace as its Python twin; `bpp_ahd_jit.cpp` emits C++ instead of Python and compiles it, so the middle layer of the validator becomes the compiler. See [`cpp/README.md`](cpp/README.md) |
 | `expected/` | — | the frozen output of every demo. One file per demo, and both implementations are compared against it |
 | `tests/` | **Algorithms 1 and 2** | invariants the demos never exercise: non-monotone acceptance, exhausted retries, each reason the validator can refuse |
 | `reproduce.py` | — | runs all of it and says what matched |
@@ -58,7 +60,8 @@ the numbering moved between drafts and the titles did not.
 python3 tsp_transient.py             # transient solution-level operator
 python3 bpp_amortized.py             # amortized code-emitting operator
 python3 ablation.py candidates.json  # drop-channel ablation
-make -C cpp && ./cpp/bin/tsp_transient   # the same trace, in C++
+make -C cpp && ./cpp/bin/tsp_transient       # the same trace, in C++
+make -C cpp jit && ./cpp/bin/bpp_ahd_jit    # the operator emits C++, and the loop compiles it
 ```
 
 Python ≥ 3.9, standard library only. The notebooks are the one exception: they need

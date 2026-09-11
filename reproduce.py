@@ -205,12 +205,15 @@ def step_jit(bless: bool) -> None:
     if not os.path.exists(path):
         record(SKIP, "cpp bpp_ahd_jit", "not built (run make -C cpp)")
         return
-    rc, produced = run([path], cwd=CPP)
+    rc, produced = run([path])
     if rc != 0:
         record(FAIL, "cpp bpp_ahd_jit", f"exit {rc}")
         print(produced)
         return
-    compare("cpp bpp_ahd_jit", produced, "bpp_ahd_jit.txt", bless)
+    # compared against the bin-packing golden file, the same one the Python demo
+    # is compared against: the search is the same search whether the artifact it
+    # emits is Python source or C++ source, and the trace says so
+    compare("cpp bpp_ahd_jit == python bpp", produced, "bpp_amortized.txt", bless=False)
 
 
 def main() -> int:
