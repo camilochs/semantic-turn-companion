@@ -12,7 +12,7 @@ import math
 import re
 
 from search import build_and_validate
-from llm import MockLLM
+from llm import MockLLM, load_pool
 
 COORDS = {0: (0, 0), 1: (1, 0), 2: (2, 0), 3: (2, 2), 4: (0, 2)}
 N = len(COORDS)
@@ -62,18 +62,14 @@ class Spec:
         return prompt + f"\n[repair] previous payload failed validation: {err}. Emit a corrected CANDIDATE."
 
 
-def _cand(perm):
-    return f"CANDIDATE\nid: t\nrepresentation: permutation\npayload:\n{perm}\nEND_CANDIDATE"
-
-
 def main():
     incumbent = [0, 2, 3, 4, 1]
-    pool = [
-        _cand([0, 1, 4, 4, 2]),   # invalid: city 4 duplicated, city 3 missing -> repair
-        _cand([0, 1, 2, 3, 4]),   # repaired optimum, length 8.000
-        _cand([0, 2, 1, 3, 4]),   # a further valid (non-improving) candidate
-        _cand([0, 3, 1, 2, 4]),
-    ]
+    # fixtures/tsp_pool.txt holds the four completions, in this order:
+    #   [0,1,4,4,2]  invalid (city 4 duplicated, city 3 missing) -> triggers repair
+    #   [0,1,2,3,4]  the repaired tour, length 8.000
+    #   [0,2,1,3,4]  a further valid, non-improving candidate
+    #   [0,3,1,2,4]  likewise
+    pool = load_pool("tsp_pool.txt")
     llm = MockLLM(pool, seed=0)
     accept = lambda cand, sc, cur, scur: sc < scur  # strict improvement
     best, best_score, log = build_and_validate(

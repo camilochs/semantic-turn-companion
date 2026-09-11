@@ -1,0 +1,7 @@
+CANDIDATE
+id: h
+representation: python
+payload:
+def priority(item, bins):
+    return [-i for i in range(len(bins))]
+END_CANDIDATE

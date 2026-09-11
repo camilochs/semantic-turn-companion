@@ -18,7 +18,7 @@ import math
 import re
 
 from search import build_and_validate
-from llm import MockLLM
+from llm import MockLLM, load_pool
 
 CAPACITY = 10
 
@@ -109,20 +109,14 @@ class Spec:
         return prompt + f"\n[repair] previous program failed validation: {err}."
 
 
-def _cand(code):
-    return f"CANDIDATE\nid: h\nrepresentation: python\npayload:\n{code}\nEND_CANDIDATE"
-
-
-# Candidate heuristics the (mock) operator proposes, as code payloads.
-_FIRST_FIT = "def priority(item, bins):\n    return [-i for i in range(len(bins))]"      # earliest feasible bin
-_BAD = "def priority(item, bins):\n    return 0   # invalid: not one score per bin"        # triggers repair
-_WORST_FIT = "def priority(item, bins):\n    return [b - item for b in bins]"               # largest leftover
-_BEST_FIT = "def priority(item, bins):\n    return [-(b - item) for b in bins]"             # smallest leftover
-
-
 def main():
-    incumbent = parse(_cand(_FIRST_FIT))  # start from a first-fit heuristic
-    pool = [_cand(_BAD), _cand(_WORST_FIT), _cand(_BEST_FIT)]
+    # fixtures/bpp_incumbent.txt is the first-fit heuristic the search starts from;
+    # fixtures/bpp_pool.txt holds the three completions, in this order:
+    #   returns a scalar   invalid (not one score per bin) -> triggers repair
+    #   worst fit          largest leftover, no improvement
+    #   best fit           smallest leftover, reaches the lower bound
+    incumbent = parse(load_pool("bpp_incumbent.txt")[0])
+    pool = load_pool("bpp_pool.txt")
     llm = MockLLM(pool, seed=0)
     accept = lambda cand, sc, cur, scur: sc < scur  # strict improvement
     best, best_score, log = build_and_validate(

@@ -1,0 +1,7 @@
+lower bound (total bins) = 19
+first-fit start: total bins = 22  (gap 15.8%)
+  step 0: rejected 22
+  step 1: accepted 19
+  step 2: rejected 22
+  step 3: rejected 19
+best heuristic: total bins = 19  (gap 0.0%)

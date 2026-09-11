@@ -1,0 +1,23 @@
+CANDIDATE
+id: h
+representation: python
+payload:
+def priority(item, bins):
+    return 0   # invalid: not one score per bin
+END_CANDIDATE
+---
+CANDIDATE
+id: h
+representation: python
+payload:
+def priority(item, bins):
+    return [b - item for b in bins]
+END_CANDIDATE
+---
+CANDIDATE
+id: h
+representation: python
+payload:
+def priority(item, bins):
+    return [-(b - item) for b in bins]
+END_CANDIDATE

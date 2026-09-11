@@ -1,0 +1,5 @@
+incumbent [0, 2, 3, 4, 1]  length 9.236
+  step 0: accepted 8.0
+  step 1: rejected 9.236
+  step 2: rejected 10.893
+best [0, 1, 2, 3, 4]  length 8.000

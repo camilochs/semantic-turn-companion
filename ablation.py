@@ -18,7 +18,8 @@ import json
 import sys
 import statistics
 
-from bpp_amortized import parse, evaluator, lower_bound_total, _cand
+from bpp_amortized import parse, evaluator, lower_bound_total
+from llm import envelope
 
 LB = lower_bound_total()
 
@@ -29,7 +30,7 @@ def gap(bins):
 
 def score(code):
     try:
-        fn = parse(_cand(code))
+        fn = parse(envelope(code))
     except ValueError as e:
         return None, str(e)
     return evaluator(fn), None

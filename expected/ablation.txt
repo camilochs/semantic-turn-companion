@@ -1,0 +1,9 @@
+online BPP lower bound = 19 bins; parent first-fit gap = 15.8%
+
+[FULL]  n=3  valid=3
+  gap%: mean=0.0  min=0.0  max=0.0  optimal(gap=0)=3/3
+  implements least-slack idea: 3/3
+
+[ABLATED]  n=3  valid=3
+  gap%: mean=0.0  min=0.0  max=0.0  optimal(gap=0)=3/3
+  implements least-slack idea: 0/3

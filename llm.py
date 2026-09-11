@@ -9,7 +9,40 @@ for reproducibility, pin a dated model snapshot and record the seed (Appendix B
 of the paper).
 """
 from __future__ import annotations
+import os
 from typing import List
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+FIXTURES = os.path.join(HERE, "fixtures")
+
+# A completion pool is a text file holding the exact envelopes the operator
+# receives, separated by a line containing only `---`.  The pool lives in a file,
+# not in the demo that uses it, because the C++ port must sample the same
+# completions: two copies of the same pool would drift on the first edit.
+POOL_SEPARATOR = "\n---\n"
+
+
+def envelope(payload: str, ident: str = "h", representation: str = "python") -> str:
+    """Wrap a payload in the CANDIDATE envelope the validator expects.
+
+    Used where a payload arrives without its envelope — the ablation reads bare
+    code from a JSON file and still has to go through the same parser the search
+    loop uses, or it would not be testing the same validator.
+    """
+    return (f"CANDIDATE\nid: {ident}\nrepresentation: {representation}\n"
+            f"payload:\n{payload}\nEND_CANDIDATE")
+
+
+def load_pool(name: str) -> List[str]:
+    """Read a completion pool from `fixtures/<name>`."""
+    path = name if os.path.isabs(name) else os.path.join(FIXTURES, name)
+    with open(path, encoding="utf-8") as fh:
+        raw = fh.read()
+    pool = [part.strip() for part in raw.split(POOL_SEPARATOR)]
+    pool = [p for p in pool if p]
+    if not pool:
+        raise ValueError(f"no completions in {path}")
+    return pool
 
 
 class MockLLM:
