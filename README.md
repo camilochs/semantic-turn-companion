@@ -13,15 +13,17 @@ The same holds for the emitted artifact: the operator reaches the same heuristic
 22 bins down to 19, whether what it writes is Python or C++.
 
 ```bash
-python3 reproduce.py                    # everything that needs no extra tool
-python3 reproduce.py --with-notebooks   # also runs the notebooks headless
+python3 reproduce.py                             # the demos, the tests and the C++ port
+python3 reproduce.py --with-notebooks --jit      # everything, notebooks and compiled candidates included
 ```
 
-Last line of that run:
+Last line of the second one, here:
 
 ```
-11 passed, 0 skipped, 0 failed
+12 passed, 0 skipped, 0 failed
 ```
+
+A step whose tool is missing is reported as skipped, never as passed.
 
 ## Start here
 
