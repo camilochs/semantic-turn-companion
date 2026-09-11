@@ -1,0 +1,24 @@
+{
+  "title": "Companion code for 'From Hand-Crafted to LLM-Based Variation Operators in Metaheuristics: A Tutorial'",
+  "description": "<p>Runnable reference implementation for the tutorial. The build-and-validate loop (Algorithm 1) is implemented twice, in Python and in C++17, and both are compared against the same frozen output: if they disagree, the algorithm as written in the paper is under-specified.</p><p>Includes a <em>transient</em> numeric-conditioned operator (TSP), an <em>amortized</em> code-emitting operator (online bin packing), the drop-channel ablation behind the placement rule, five notebooks, and <code>reproduce.py</code>, which runs all of it and reports what matched. Everything runs offline: a deterministic mock model returns completions from a fixed pool, so no API key and no network are needed. Python 3.9+, standard library only; the notebooks additionally need Jupyter.</p>",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "MIT",
+  "creators": [
+    {"name": "Chacón Sartori, Camilo", "affiliation": "Apeiron Intelligence & IIIA-CSIC", "orcid": "0000-0002-8543-9893"},
+    {"name": "Rodríguez Corominas, Guillem", "affiliation": "Universitat Politècnica de Catalunya & IIIA-CSIC"},
+    {"name": "Blum, Christian", "affiliation": "IIIA-CSIC"}
+  ],
+  "keywords": [
+    "metaheuristics",
+    "large language models",
+    "variation operators",
+    "automatic heuristic design",
+    "combinatorial optimization",
+    "reproducibility",
+    "tutorial"
+  ],
+  "related_identifiers": [
+    {"identifier": "https://github.com/camilochs/semantic-turn-companion", "relation": "isSupplementTo", "scheme": "url"}
+  ]
+}

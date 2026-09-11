@@ -1,20 +1,23 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite both the paper and the software."
-title: "Companion code for 'The Semantic Turn in Metaheuristics'"
+title: "Companion code for 'From Hand-Crafted to LLM-Based Variation Operators in Metaheuristics: A Tutorial'"
 abstract: >-
-  Runnable reference implementation accompanying the tutorial "The Semantic Turn
-  in Metaheuristics: A Tutorial on Conditioning, Building, and Choosing LLM
-  Variation Operators." Includes the build-and-validate loop (Algorithm 1), a
-  transient solution-level operator (TSP), and an amortized code-emitting operator
-  (online bin packing), all runnable offline via a deterministic mock LLM.
+  Runnable reference implementation accompanying the tutorial "From Hand-Crafted to
+  LLM-Based Variation Operators in Metaheuristics." Includes the build-and-validate
+  loop (Algorithm 1) in Python and in C++, a transient solution-level operator (TSP),
+  an amortized code-emitting operator (online bin packing), the drop-channel
+  ablation, and five notebooks that walk through them. Everything runs offline via a
+  deterministic mock model; the two implementations of the loop are checked against
+  the same frozen output.
 type: software
-version: "1.0.0"
-date-released: "2026-06-27"
+version: "1.1.0"
+date-released: "2026-09-11"
 license: MIT
 authors:
   - family-names: "Chacón Sartori"
     given-names: "Camilo"
-    affiliation: "ICN2 (CSIC, BIST)"
+    affiliation: "Apeiron Intelligence & IIIA-CSIC"
+    orcid: "https://orcid.org/0000-0002-8543-9893"
   - family-names: "Rodríguez Corominas"
     given-names: "Guillem"
     affiliation: "Universitat Politècnica de Catalunya & IIIA-CSIC"

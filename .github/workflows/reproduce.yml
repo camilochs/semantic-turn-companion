@@ -1,0 +1,16 @@
+name: reproduce
+
+# The repository claims it runs offline with no dependencies and reproduces
+# exactly. This is that claim, checked on a machine that is not the author's.
+on: [push, pull_request]
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"   # the lowest version the code claims to support
+      - uses: astral-sh/setup-uv@v5
+      - run: python3 reproduce.py --with-notebooks
