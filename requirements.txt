@@ -1,0 +1,4 @@
+# Core: none — the demos use only the Python >= 3.9 standard library.
+#
+# Optional, for the real-LLM adapter in llm.py (AnthropicLLM):
+# anthropic>=0.40

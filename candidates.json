@@ -1,0 +1,13 @@
+{
+  "_comment": "Reproducible example set for the drop-channel ablation of Appendix C. FULL = parent code + the natural-language idea 'prefer least remaining slack' + scores; ABLATED = parent code + scores only (idea removed). Each entry is a priority(item, bins) heuristic the operator could emit under that condition. On the easy online-BPP task both conditions reach the optimum, so the NL channel is not load-bearing here. Regenerate with a real model via llm.AnthropicLLM to run your own ablation.",
+  "FULL": [
+    "def priority(item, bins):\n    # least remaining slack after placing (best-fit)\n    return [-(b - item) for b in bins]",
+    "def priority(item, bins):\n    # same tightest-fit rule, written as item - b\n    return [item - b for b in bins]",
+    "def priority(item, bins):\n    # tightest fit by absolute slack\n    return [-abs(b - item) for b in bins]"
+  ],
+  "ABLATED": [
+    "def priority(item, bins):\n    # smallest remaining capacity\n    return [-b for b in bins]",
+    "def priority(item, bins):\n    # prefer the fullest open bin (capacity 10)\n    return [10 - b for b in bins]",
+    "def priority(item, bins):\n    # prefer low remaining capacity (monotone in b)\n    return [-(b * b) for b in bins]"
+  ]
+}
