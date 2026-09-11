@@ -163,11 +163,16 @@ def notebook_outputs(path: str) -> str:
 
 # what each notebook must actually print; running without an exception is not reproduction
 NOTEBOOK_CLAIMS = {
-    "01_anatomy.ipynb": ["CANDIDATE", "accepted"],
-    "02_validate_and_repair.ipynb": ["schema error", "syntax error", "feasibility"],
-    "03_tsp_transient.ipynb": ["length 9.236", "best [0, 1, 2, 3, 4]  length 8.000"],
-    "04_bpp_amortized.ipynb": ["first-fit start: total bins = 22", "total bins = 19  (gap 0.0%)"],
-    "05_drop_channel_ablation.ipynb": ["[FULL]", "[ABLATED]", "optimal(gap=0)=3/3"],
+    "01_anatomy.ipynb": ["CANDIDATE", "accepted", "best is 3"],
+    "02_validate_and_repair.ipynb": ["schema error", "syntax error", "feasibility",
+                                     "retries=0: invalid", "retries=1: accepted"],
+    "03_tsp_transient.ipynb": ["length 9.236", "best [0, 1, 2, 3, 4]  length 8.000",
+                               "3 steps, 4 model calls"],
+    "04_bpp_amortized.ipynb": ["first-fit start: total bins = 22", "total bins = 19  (gap 0.0%)",
+                               "model calls needed to pack it: 0"],
+    "05_the_lens.ipynb": ["Numeric", "Symbolic", "Linguistic", "boilerplate"],
+    "06_drop_channel_ablation.ipynb": ["[FULL]", "[ABLATED]", "optimal(gap=0)=3/3",
+                                       "lower bound: 19 bins"],
 }
 
 

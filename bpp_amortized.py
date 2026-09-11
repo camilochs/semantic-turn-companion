@@ -77,21 +77,30 @@ def feasible(priority):
     return True
 
 
-def _pack(priority, items):
-    bins = []  # remaining capacities of open bins
+def pack(priority, items):
+    """Run the heuristic on one instance and return what each open bin holds.
+
+    Returns the contents rather than the count so a caller can look at the
+    packing itself; `evaluator` only needs how many bins it took. One
+    implementation, because a second one written for inspection would sooner or
+    later disagree with the one being scored.
+    """
+    bins = []  # contents of each open bin
     for item in items:
-        feas = [i for i, b in enumerate(bins) if b >= item]
+        room = [CAPACITY - sum(b) for b in bins]
+        feas = [i for i, free in enumerate(room) if free >= item]
         if feas:
-            scores = priority(item, [bins[i] for i in feas])
+            scores = priority(item, [room[i] for i in feas])
+            # first maximum wins, as in the C++ port
             j = feas[max(range(len(feas)), key=lambda k: scores[k])]
-            bins[j] -= item
+            bins[j].append(item)
         else:
-            bins.append(CAPACITY - item)
-    return len(bins)
+            bins.append([item])
+    return bins
 
 
 def evaluator(priority):
-    return sum(_pack(priority, inst) for inst in INSTANCES)
+    return sum(len(pack(priority, inst)) for inst in INSTANCES)
 
 
 class Spec:

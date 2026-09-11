@@ -12,7 +12,11 @@ that must keep working.
 import os
 import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if ROOT not in sys.path:
-    sys.path.insert(0, ROOT)
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+# both, and explicitly: changing the working directory below would otherwise take
+# this folder off the path and `import viz` would stop working
+for path in (HERE, ROOT):
+    if path not in sys.path:
+        sys.path.insert(0, path)
 os.chdir(ROOT)  # fixtures/ and candidates.json are resolved from the root

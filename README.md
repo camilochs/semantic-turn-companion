@@ -25,18 +25,27 @@ reproduce.py`.
 
 ## Start with the notebooks
 
-They print their output, so GitHub shows the traces without you running a thing.
+Six of them, in order. They carry their output, so GitHub shows the traces and the
+figures without you running a thing.
 
-1. [The anatomy of an operator](notebooks/01_anatomy.ipynb). Prompt, sample, verdict,
-   decision. Four events, on a problem small enough to hold in your head.
-2. [The validator](notebooks/02_validate_and_repair.ipynb). Three layers, each one
-   refusing a different bad reply, and the reason travelling into the repair prompt.
-3. [A transient operator](notebooks/03_tsp_transient.ipynb). The traced iteration of
-   the tutorial, on TSP.
-4. [An amortized operator](notebooks/04_bpp_amortized.ipynb). The same loop searching
-   program space instead of solution space.
-5. [The drop-channel ablation](notebooks/05_drop_channel_ablation.ipynb). The test the
-   placement rule has to survive, and a negative result read for what it is.
+1. [**An operator, taken apart**](notebooks/01_anatomy.ipynb). One step done by hand,
+   cell by cell, before the loop does it for you. Ends with the reason the loop keeps
+   two solutions instead of one.
+2. [**Refusing a reply, and saying why**](notebooks/02_validate_and_repair.ipynb). The
+   three layers of the validator, and what one retry buys when the message is specific.
+3. [**The model proposes the solution**](notebooks/03_tsp_transient.ipynb). The traced
+   iteration of the tutorial, with the tours drawn and the model calls counted.
+4. [**The model writes the heuristic**](notebooks/04_bpp_amortized.ipynb). The same loop
+   through program space, the packings drawn side by side, and the instance that costs
+   no model call at all.
+5. [**What is the operator conditioned on?**](notebooks/05_the_lens.ipynb). The three
+   channels on one task, the rule that decides which one is load-bearing, and both maps.
+6. [**Putting the rule to the test**](notebooks/06_drop_channel_ablation.ipynb). The
+   ablation, a negative result, and the measurement that shows why this task could not
+   have answered the question.
+
+The figures are drawn in SVG from the standard library, so the notebooks add Jupyter
+and nothing else.
 
 ## The demos
 
