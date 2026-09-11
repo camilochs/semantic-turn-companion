@@ -1,57 +1,67 @@
 # The C++ side
 
-Most metaheuristic code is written in C++, so the loop of the tutorial is here as
-well. `semantic_turn.hpp` is a translation of `search.py` and `llm.py`, not a
-second design: same four functions in the spec (`render`, `parse`, `feasible`,
-`repair_prompt`), same separation between the incumbent the search walks and the
-best artifact seen.
+Most metaheuristic code is written in C++, and a reader who works there should not
+have to read Python to lift the loop. So `semantic_turn.hpp` is the same algorithm:
+the same four functions in the spec (`render`, `parse`, `feasible`,
+`repair_prompt`), the same separation between the incumbent the search walks and the
+best artifact seen. Header-only, C++17, no third-party libraries.
 
 ```bash
-make && ./bin/tsp_transient     # the traced iteration, same output as python3 tsp_transient.py
-make jit && ./bin/bpp_ahd_jit   # opt-in: the operator emits C++, and the loop compiles it
+make && ./bin/tsp_transient     # the traced iteration
+make jit && ./bin/bpp_ahd_jit   # the operator emits C++, and the loop compiles it
 ```
 
-In `bpp_ahd_jit.cpp` the middle layer of Algorithm 2 is the compiler: a candidate
-that does not build is refused with the compiler's own diagnostic, and that text is
-what the repair prompt hands back. Only the fact of the failure is printed in the
-trace — the wording of a diagnostic is not the same across compilers, and nothing
-that varies by toolchain belongs in a file that claims to reproduce. Pass
-`--show-diagnostics` to see it.
+## The port is also a test
 
-## Why the port is also a test
+`./bin/tsp_transient` and `python3 tsp_transient.py` read the same completions from
+`fixtures/tsp_pool.txt` and are compared against the same file,
+`expected/tsp_transient.txt`. If they ever disagree, Algorithm 1 as written in the
+paper leaves something open, and `reproduce.py` says which line.
 
-`./bin/tsp_transient` and `python3 tsp_transient.py` are compared against the same
-file, `expected/tsp_transient.txt`. They read the same completions from
-`fixtures/tsp_pool.txt`. If the two disagree, the algorithm as written in the paper
-is under-specified somewhere, and `reproduce.py` says so.
+Two places where they nearly disagreed, both written out here instead of left to
+whatever each language's library happens to do:
 
-Two places where that nearly happens, both handled explicitly here rather than
-inherited from whatever each language's library does:
+**Tie-breaking.** Python's `max(range(n), key=...)` returns the first maximum and so
+does `std::max_element`. They agree by coincidence of library behaviour, so the
+tie-break in `bpp_ahd_jit.cpp` is spelled out in a loop where you can see it.
 
-- **Tie-breaking.** Python's `max(range(n), key=...)` returns the first maximum and
-  so does `std::max_element`. They agree by coincidence of library behaviour, not by
-  specification, so any tie-break in this code is written out instead of assumed.
-- **Iteration order.** The coordinates are a `std::vector`, never a map. An
-  unordered container is the usual way to lose cross-language identity quietly.
+**Iteration order.** The coordinates are a `std::vector`. Reach for a hash map here
+and the two languages quietly stop matching.
 
 ## The compiler flags are part of the claim
 
 `-std=c++17 -O2` and nothing else. `-ffast-math`, `-Ofast` and `-march=native` let
 the compiler contract floating-point operations, and then the tour length printed
-here stops matching the one printed by Python. Verified with both `g++` and
-`clang++`: byte-identical output.
+here stops matching the one Python prints. I checked the output under `g++` and
+`clang++`: identical bytes. Comparison is always on formatted text, never on raw
+doubles.
 
-Comparison is always on formatted text, never on raw doubles.
+## When the validator is a compiler
 
-## What is not here, and why
+In `bpp_ahd_jit.cpp` the model writes C++ and the loop builds it. A candidate that
+does not compile is refused with the compiler's own words, and those words are what
+the repair prompt hands back. That is the middle layer of Algorithm 2, in the form a
+C++ practitioner actually meets it.
 
-- **No port of the bin-packing operator.** That demo emits Python source and runs
-  it; a C++ program cannot do that without embedding an interpreter. The honest C++
-  counterpart is `bpp_ahd_jit.cpp`, where the emitted artifact is C++ — and it lands
-  on the same trace as the Python one, first fit at 22 bins to best fit at 19, which
-  is why `reproduce.py --jit` compares it against `expected/bpp_amortized.txt`.
-- **No real model adapter.** The C++ side is mock-only. It exists to show the loop,
-  not the transport; adding an HTTP client and a JSON library would double the
-  dependencies of the repository to demonstrate nothing about the operator.
-- **No CMake, no test framework, no templates beyond one.** A reader who last wrote
-  C++11 should be able to follow this in one sitting.
+The trace prints only that the build failed. A diagnostic is worded differently by
+each compiler, and a file that claims to reproduce should not contain anything that
+changes with the toolchain. Pass `--show-diagnostics` to see the real text.
+
+The candidate is compiled to its own executable and invoked, rather than loaded into
+this process, so a generated program that crashes or hangs takes only itself down.
+That process boundary is thin. Do not point a live model at this demo outside a
+container or a virtual machine.
+
+## What is deliberately missing
+
+There is no C++ port of `bpp_amortized.py`. That demo emits Python source and runs
+it, and doing the same in C++ would mean embedding an interpreter. The honest
+counterpart is the emitted-C++ demo above, which lands on the same trace anyway:
+first fit at 22 bins, best fit at 19.
+
+There is no real model adapter here either. The C++ side exists to show the loop,
+and an HTTP client plus a JSON library would double the dependencies of the
+repository to demonstrate nothing about the operator.
+
+No CMake, no test framework, one template parameter. Someone who last wrote C++11
+should get through this in one sitting.
