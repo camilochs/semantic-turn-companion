@@ -11,7 +11,7 @@ they implement the idea's structural marker (use of remaining slack b-item).
 
 If the NL channel is load-bearing, FULL and ABLATED should differ.
 
-Usage:  python3 ablation.py candidates.json
+Usage:  uv run ablation.py candidates.json
   candidates.json = {"FULL": ["def priority(item, bins): ...", ...], "ABLATED": [...]}
 """
 import json

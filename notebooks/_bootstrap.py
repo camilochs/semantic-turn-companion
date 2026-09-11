@@ -6,7 +6,7 @@ matching the first one the day either is corrected, and here there would be thre
 versions to keep in step: the paper, the Python and the C++.
 
 Three lines instead of making the repository an installable package, because the
-published way to run everything is `python3 tsp_transient.py` from the root, and
+published way to run everything is `uv run tsp_transient.py` from the root, and
 that must keep working.
 """
 import os

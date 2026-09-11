@@ -10,7 +10,7 @@ by the total number of bins used (lower is better).  The LLM is paid once,
 offline; the emitted heuristic then runs with no further LLM calls --- the cost is
 amortized.
 
-Run:  python3 bpp_amortized.py
+Run:  uv run bpp_amortized.py
 """
 from __future__ import annotations
 import ast

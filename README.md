@@ -10,15 +10,18 @@ loop goes all the way through and lands on the same numbers every time, on any
 machine, with no API key. There is an optional Claude adapter for real runs.
 
 ```bash
-python3 reproduce.py --with-notebooks --jit
+uv run reproduce.py --with-notebooks --jit
 ```
 
 ```
 12 passed, 0 skipped, 0 failed
 ```
 
-Python 3.9 and the standard library. The notebooks want Jupyter, and that command
-runs them through `uv` without installing anything.
+The code is Python 3.9 and the standard library, so `python3 reproduce.py` works
+too. The examples use `uv` because it picks the interpreter for you and because the
+notebooks need Jupyter, which that command pulls in for the run and leaves nothing
+behind. To check the oldest version the code claims to support, `uv run --python 3.9
+reproduce.py`.
 
 ## Start with the notebooks
 
@@ -38,7 +41,7 @@ They print their output, so GitHub shows the traces without you running a thing.
 ## The demos
 
 ```bash
-python3 tsp_transient.py
+uv run tsp_transient.py
 ```
 
 ```
@@ -56,7 +59,7 @@ back as `[0, 1, 2, 3, 4]`. The repair happens inside step 0, which is why the lo
 shows three steps and not four.
 
 ```bash
-python3 bpp_amortized.py
+uv run bpp_amortized.py
 ```
 
 ```

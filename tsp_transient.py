@@ -5,7 +5,7 @@ the traced iteration of Section 4.4: an incumbent [0,2,3,4,1] of length 9.236, a
 invalid first sample [0,1,4,4,2] that the validator rejects (city 4 duplicated,
 city 3 missing), and a repaired [0,1,2,3,4] of length 8.000 that is accepted.
 
-Run:  python3 tsp_transient.py
+Run:  uv run tsp_transient.py
 """
 from __future__ import annotations
 import math

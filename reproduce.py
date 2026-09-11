@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Run everything in this repository and compare it against the frozen output.
 
-    python3 reproduce.py                    the Python demos, the unit tests, and the C++ port
-    python3 reproduce.py --with-notebooks   also execute the notebooks headless
-    python3 reproduce.py --jit              also run the opt-in compile-emitted-C++ demo
-    python3 reproduce.py --bless            rewrite expected/ from the current run
+    uv run reproduce.py                    the Python demos, the unit tests, and the C++ port
+    uv run reproduce.py --with-notebooks   also execute the notebooks headless
+    uv run reproduce.py --jit              also run the opt-in compile-emitted-C++ demo
+    uv run reproduce.py --bless            rewrite expected/ from the current run
 
 Standard library only, so the check itself carries no dependency. A step whose
 tool is missing is reported as SKIP, never as a pass: the last line always says how
@@ -71,9 +71,12 @@ def compare(name: str, produced: str, expected_file: str, bless: bool) -> None:
 
 # ── 1. the Python demos ──────────────────────────────────────────────────────
 PY_DEMOS = [
-    ("tsp_transient.py", ["python3", "tsp_transient.py"], "tsp_transient.txt"),
-    ("bpp_amortized.py", ["python3", "bpp_amortized.py"], "bpp_amortized.txt"),
-    ("ablation.py", ["python3", "ablation.py", "candidates.json"], "ablation.txt"),
+    # sys.executable, not "python3": under `uv run --python 3.9` the harness and
+    # the demos have to be the same interpreter, or the check reports a version
+    # nobody ran
+    ("tsp_transient.py", [sys.executable, "tsp_transient.py"], "tsp_transient.txt"),
+    ("bpp_amortized.py", [sys.executable, "bpp_amortized.py"], "bpp_amortized.txt"),
+    ("ablation.py", [sys.executable, "ablation.py", "candidates.json"], "ablation.txt"),
 ]
 
 
@@ -94,7 +97,7 @@ def step_tests() -> None:
     if not os.path.isdir(os.path.join(HERE, "tests")):
         record(SKIP, "unit tests", "no tests/ directory")
         return
-    rc, out = run(["python3", "-m", "unittest", "discover", "-s", "tests", "-q"])
+    rc, out = run([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-q"])
     tail = [ln for ln in out.strip().splitlines() if ln.strip()][-1:] or [""]
     record(PASS if rc == 0 else FAIL, "unit tests", tail[0])
     if rc != 0:

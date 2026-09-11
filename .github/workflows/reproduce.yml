@@ -9,8 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.9"   # the lowest version the code claims to support
       - uses: astral-sh/setup-uv@v5
-      - run: python3 reproduce.py --with-notebooks
+      # 3.9 is the oldest version the code claims to support, and uv brings it
+      - run: uv run --python 3.9 reproduce.py --with-notebooks

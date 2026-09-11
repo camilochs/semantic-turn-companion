@@ -13,7 +13,7 @@ make jit && ./bin/bpp_ahd_jit   # the operator emits C++, and the loop compiles 
 
 ## The port is also a test
 
-`./bin/tsp_transient` and `python3 tsp_transient.py` read the same completions from
+`./bin/tsp_transient` and `uv run tsp_transient.py` read the same completions from
 `fixtures/tsp_pool.txt` and are compared against the same file,
 `expected/tsp_transient.txt`. If they ever disagree, Algorithm 1 as written in the
 paper leaves something open, and `reproduce.py` says which line.
